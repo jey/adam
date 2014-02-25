@@ -28,6 +28,7 @@ import org.apache.spark.SparkContext._
 import org.apache.spark.Logging
 import edu.berkeley.cs.amplab.adam.projections.{ADAMVariantAnnotations, ADAMVariantField}
 import edu.berkeley.cs.amplab.adam.rdd.AdamContext._
+import edu.berkeley.cs.amplab.adam.rdd.recalibration.BaseQualityRecalibration
 import edu.berkeley.cs.amplab.adam.converters.GenotypesToVariantsConverter
 import edu.berkeley.cs.amplab.adam.util.{MapTools, ParquetLogger}
 import java.util.logging.Level

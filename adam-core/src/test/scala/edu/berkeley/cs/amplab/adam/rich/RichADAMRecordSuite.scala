@@ -22,28 +22,7 @@ import edu.berkeley.cs.amplab.adam.models.{TagType, Attribute}
 
 class RichADAMRecordSuite extends FunSuite {
 
-  test("Unclipped Start") {
-    val recordWithoutClipping = ADAMRecord.newBuilder().setReadMapped(true).setCigar("10M").setStart(42).build()
-    val recordWithClipping = ADAMRecord.newBuilder().setReadMapped(true).setCigar("2S8M").setStart(42).build()
-    val recordWithHardClipping = ADAMRecord.newBuilder().setReadMapped(true).setCigar("3H2S5M4S").setStart(42).build()
-    assert(recordWithoutClipping.unclippedStart == Some(42L))
-    assert(recordWithClipping.unclippedStart == Some(40L))
-    assert(recordWithHardClipping.unclippedStart == Some(37L))
-  }
-
-  test("Unclipped End") {
-    val unmappedRead = ADAMRecord.newBuilder().setReadMapped(false).setStart(0).setCigar("10M").build()
-    val recordWithoutClipping = ADAMRecord.newBuilder().setReadMapped(true).setCigar("10M").setStart(10).build()
-    val recordWithClipping = ADAMRecord.newBuilder().setReadMapped(true).setCigar("8M2S").setStart(10).build()
-    val recordWithHardClipping = ADAMRecord.newBuilder().setReadMapped(true).setCigar("6M2S2H").setStart(10).build()
-    assert(unmappedRead.unclippedEnd == None)
-    assert(recordWithoutClipping.unclippedEnd == Some(20L))
-    assert(recordWithClipping.unclippedEnd == Some(20L))
-    assert(recordWithHardClipping.unclippedEnd == Some(20L))
-  }
-
-  test( "Reference End Position")
-  {
+  test( "Reference End Position") {
     val unmappedRead = ADAMRecord.newBuilder().setReadMapped(false).setStart(0).setCigar("10M").build()
     val recordWithoutClipping = ADAMRecord.newBuilder().setReadMapped(true).setCigar("10M").setStart(10).build()
     val recordWithClipping = ADAMRecord.newBuilder().setReadMapped(true).setCigar("8M2S").setStart(10).build()
@@ -70,9 +49,8 @@ class RichADAMRecordSuite extends FunSuite {
 
   test("Cigar Clipping Sequence") {
     val softClippedRead = ADAMRecord.newBuilder().setReadMapped(true).setStart(100).setCigar("10S90M").build()
-    assert( softClippedRead.referencePositions(0) == Some(90L))
-
-
+    assert( softClippedRead.referencePositions(0) == None)
+    assert( softClippedRead.referencePositions(10) == Some(100L))
   }
 
   test("tags contains optional fields") {
@@ -90,7 +68,7 @@ class RichADAMRecordSuite extends FunSuite {
 
     val softClippedRead = ADAMRecord.newBuilder().setReadMapped(true).setStart(1000).setCigar("10S90M").build()
     assert( softClippedRead.referencePositions.length == 100)
-    assert( softClippedRead.referencePositions(0) == Some(990L))
+    assert( softClippedRead.referencePositions(0) == None)
     assert( softClippedRead.referencePositions(10) == Some(1000L))
 
     val doubleMatchNonsenseRead = ADAMRecord.newBuilder().setReadMapped(true).setStart(1000).setCigar("10M10M").build()
@@ -115,7 +93,7 @@ class RichADAMRecordSuite extends FunSuite {
 
     val hg00096read = ADAMRecord.newBuilder().setReadMapped(true).setStart(1000).setCigar("1S28M1D32M1I15M1D23M").build()
     assert( hg00096read.referencePositions.length == 100)
-    assert( hg00096read.referencePositions(0) == Some(999L))
+    assert( hg00096read.referencePositions(0) == None)
     assert( hg00096read.referencePositions(1) == Some(1000L))
     assert( hg00096read.referencePositions(29)  == Some(1029L) )
     assert( hg00096read.referencePositions(61)  == None )

@@ -87,32 +87,10 @@ class RichADAMRecord(val record: ADAMRecord) {
     }
   }
 
-  // Returns the position of the unclipped end if the read is mapped, None otherwise
-  lazy val unclippedEnd: Option[Long] = {
-    if (record.getReadMapped) {
-      Some(samtoolsCigar.getCigarElements.reverse.takeWhile(isClipped).foldLeft(end.get) {
-        (pos, cigarEl) => pos + cigarEl.getLength
-      })
-    } else {
-      None
-    }
-  }
-
-  // Returns the position of the unclipped start if the read is mapped, None otherwise.
-  lazy val unclippedStart: Option[Long] = {
-    if (record.getReadMapped) {
-      Some(samtoolsCigar.getCigarElements.takeWhile(isClipped).foldLeft(record.getStart) {
-        (pos, cigarEl) => pos - cigarEl.getLength
-      })
-    } else {
-      None
-    }
-  }
-
   // Return the 5 prime position.
   def fivePrimePosition: Option[Long] = {
     if (record.getReadMapped) {
-      if (record.getReadNegativeStrand) unclippedEnd else unclippedStart
+      if (record.getReadNegativeStrand) end else Some(record.getStart)
     } else {
       None
     }
@@ -157,13 +135,13 @@ class RichADAMRecord(val record: ADAMRecord) {
 
   lazy val referencePositions: Seq[Option[Long]] = {
     if (record.getReadMapped) {
-      val resultTuple = samtoolsCigar.getCigarElements.foldLeft((unclippedStart.get, List[Option[Long]]()))((runningPos, elem) => {
+      val resultTuple = samtoolsCigar.getCigarElements.foldLeft((record.getStart: Long, List[Option[Long]]()))((runningPos, elem) => {
         // runningPos is a tuple, the first element holds the starting position of the next CigarOperator
         // and the second element is the list of positions up to this point
         val op = elem.getOperator
         val currentRefPos = runningPos._1
         val resultAccum = runningPos._2
-        val advanceReference = op.consumesReferenceBases || op == CigarOperator.S
+        val advanceReference = op.consumesReferenceBases
         val newRefPos = currentRefPos + (if(advanceReference) elem.getLength else 0)
         val resultParts: Seq[Option[Long]] =
           if(op.consumesReadBases) {

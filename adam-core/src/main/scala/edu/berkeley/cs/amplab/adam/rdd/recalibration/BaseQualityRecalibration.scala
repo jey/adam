@@ -79,8 +79,8 @@ extends Serializable with Logging {
   private def observe(read: DecadentRead): Seq[(CovariateKey, Observation)] = {
     def shouldIncludeResidue(residue: Residue) =
       residue.quality > QualityScore.zero &&
+        residue.isAligned &&
         residue.isRegularBase &&
-        !residue.isInsertion &&
         !knownSnps.value.isMasked(residue)
 
     // Compute keys and filter out skipped residues

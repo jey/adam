@@ -95,6 +95,13 @@ class DecadentRead(val record: RichADAMRecord) extends Logging {
       case unk => throw new IllegalArgumentException("Encountered unexpected base '%s'".format(unk))
     }
 
+    def isAligned: Boolean =
+      !record.readOffsetToReferencePosition(position).isEmpty
+
+    def isSNP: Boolean =
+      record.readOffsetToReferencePosition(position).forall(pos => !record.mdEvent.get.mismatchedBase(pos).isEmpty)
+
+    /* FIXME
     def isMismatch(includeInsertions: Boolean = true): Boolean =
       assumingAligned(record.isMismatchAtReadOffset(position).getOrElse(includeInsertions))
 
@@ -102,15 +109,24 @@ class DecadentRead(val record: RichADAMRecord) extends Logging {
 
     def isInsertion: Boolean =
       assumingAligned(record.isMismatchAtReadOffset(position).isEmpty)
+    */
 
     def referenceLocationOption: Option[ReferenceLocation] =
-      assumingAligned(
+      read.assumingAligned(
         record.readOffsetToReferencePosition(position).
         map(refOffset => new ReferenceLocation(record.getReferenceName.toString, refOffset)))
 
     def referenceLocation: ReferenceLocation =
       referenceLocationOption.getOrElse(
         throw new IllegalArgumentException("Residue has no reference location (may be an insertion)"))
+
+    def ensureAligned: Boolean =
+      isAligned || (throw new IllegalArgumentException("Residue is not aligned to the reference (may be soft clipped)"))
+
+    private def assumingAligned[T](func: => T): T = {
+      ensureAligned
+      func
+    }
   }
 
   lazy val readGroup: String = record.getRecordGroupName.toString

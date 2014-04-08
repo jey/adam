@@ -77,7 +77,7 @@ class BaseQualityRecalibration(
     input.filter(shouldIncludeRead).flatMap(observe)
   }
 
-  if(enableVisitLogging) {
+  if (enableVisitLogging) {
     input.cache
     dataset.cache
     dumpVisits("bqsr-visits.dump")
@@ -89,7 +89,7 @@ class BaseQualityRecalibration(
       aggregate(ObservationAccumulator(covariates))(_ += _, _ ++= _).result
   }
 
-  if(dumpObservationTable) {
+  if (dumpObservationTable) {
     println(observed.toCSV)
   }
 
@@ -101,9 +101,9 @@ class BaseQualityRecalibration(
   private def dumpVisits(filename: String) = {
     def readId(read: DecadentRead): String =
       read.name +
-        (if(read.isNegativeRead) "-" else "+") +
-        (if(read.record.getFirstOfPair) "1" else "") +
-        (if(read.record.getSecondOfPair) "2" else "")
+        (if (read.isNegativeRead) "-" else "+") +
+        (if (read.record.getFirstOfPair) "1" else "") +
+        (if (read.record.getSecondOfPair) "2" else "")
 
     val readLengths =
       input.map(read => (readId(read), read.sequence.length)).collectAsMap
@@ -114,11 +114,12 @@ class BaseQualityRecalibration(
 
     val outf = new java.io.File(filename)
     val writer = new java.io.PrintWriter(outf)
-    visited.foreach { case (readName, visited) =>
-      val length = readLengths(readName)
-      val buf = Array.fill[Char](length)('O')
-      visited.foreach { idx => buf(idx) = 'X' }
-      writer.println(readName + "\t" + String.valueOf(buf))
+    visited.foreach {
+      case (readName, visited) =>
+        val length = readLengths(readName)
+        val buf = Array.fill[Char](length)('O')
+        visited.foreach { idx => buf(idx) = 'X' }
+        writer.println(readName + "\t" + String.valueOf(buf))
     }
     writer.close
   }

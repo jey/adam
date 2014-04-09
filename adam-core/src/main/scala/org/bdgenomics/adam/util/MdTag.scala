@@ -332,7 +332,7 @@ class MdTag(
               reference += {
                 mismatches.get(referencePos) match {
                   case Some(base) => base
-                  case _          => throw new IllegalStateException("Could not find mismatching base at cigar offset" + i)
+                  case _ => throw new IllegalStateException("Could not find mismatching base at cigar offset" + i)
                 }
               }
             } else {
@@ -349,7 +349,7 @@ class MdTag(
             reference += {
               deletes.get(referencePos) match {
                 case Some(base) => base
-                case _          => throw new IllegalStateException("Could not find deleted base at cigar offset " + i)
+                case _ => throw new IllegalStateException("Could not find deleted base at cigar offset " + i)
               }
             }
 

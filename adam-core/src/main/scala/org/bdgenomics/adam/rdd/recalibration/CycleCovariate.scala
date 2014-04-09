@@ -47,7 +47,7 @@ class CycleCovariate extends AbstractCovariate[Int] {
 
   override def equals(other: Any) = other match {
     case that: CycleCovariate => true
-    case _                    => false
+    case _ => false
   }
 
   override def hashCode = 0x83EFAB61

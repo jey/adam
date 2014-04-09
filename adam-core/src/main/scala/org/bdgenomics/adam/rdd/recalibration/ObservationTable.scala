@@ -66,7 +66,7 @@ class Observation(val total: Long, val mismatches: Long) extends Serializable {
 
   override def equals(other: Any): Boolean = other match {
     case that: Observation => this.total == that.total && this.mismatches == that.mismatches
-    case _                 => false
+    case _ => false
   }
 
   override def hashCode = Util.hashCombine(0x634DAED9, total.hashCode, mismatches.hashCode)

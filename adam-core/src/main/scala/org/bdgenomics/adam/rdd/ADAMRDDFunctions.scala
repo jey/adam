@@ -178,8 +178,8 @@ class ADAMRecordRDDFunctions(rdd: RDD[ADAMRecord]) extends ADAMSequenceDictionar
     def overlapsQuery(rec: ADAMRecord): Boolean =
       rec.getReadMapped &&
         rec.getContig.getContigName.toString == query.referenceName &&
-        rec.start < query.end &&
-        rec.start + rec.referenceLength > query.start
+        rec.getStart < query.end &&
+        rec.getStart + rec.referenceLength > query.start
     rdd.filter(overlapsQuery)
   }
 

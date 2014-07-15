@@ -1,0 +1,63 @@
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Genome visualization for ADAM</title>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8">
+    </script>
+    <style>
+        body { font: 12px Arial;}
+        .axis path,
+        .axis line {
+        fill: none;
+        stroke: black;
+        shape-rendering: crispEdges;
+        }
+        .axis text {
+        font-family: sans-serif;
+        font-size: 11px;
+        }
+        div.tooltip {
+        position: absolute;
+        text-align: center;
+        width: 230px;
+        height: 10px;
+        padding: 2px;
+        font: 12px sans-serif;
+        background: lightsteelblue;
+        border: 0px;
+        border-radius: 8px;
+        pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Genome visualization for ADAM</h1>
+    <h2>Welcome! The current reference region is: </h2>
+            <span id="moveLeft">
+                <input name="Move left button"
+                       type="button"
+                       value="LEFT"
+                       onclick="moveLeft()"/>
+            </span>
+            <span id="zoomIn">
+                <input name="Zoom in button"
+                       type="button"
+                       value="IN"
+                       onclick="zoomIn()"/>
+            </span>
+            <span id="zoomOut">
+                <input name="Zoom out button"
+                       type="button"
+                       value="OUT"
+                       onclick="zoomOut()"/>
+            </span>
+            <span id="moveRight">
+                <input name="Move right button"
+                       type="button"
+                       value="RIGHT"
+                       onclick="moveRight()"/>
+            </span>
+    <br>
+    <!--<script src="DataViz.js"></script>-->
+</body>
+</html>

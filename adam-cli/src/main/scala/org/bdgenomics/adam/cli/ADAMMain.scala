@@ -37,7 +37,8 @@ object ADAMMain extends Logging {
       /* TODO (nealsid): Reimplement in terms of new schema
          ComputeVariants
        */
-      PluginExecutor)),
+      PluginExecutor,
+      WebUi)),
       CommandGroup("CONVERSION OPERATIONS", List(Bam2ADAM,
         Vcf2FlatGenotype,
         Vcf2ADAM,

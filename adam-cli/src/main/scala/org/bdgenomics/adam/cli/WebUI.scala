@@ -25,6 +25,7 @@ import org.bdgenomics.adam.rdd.ADAMContext._
 import org.apache.spark.{ SparkContext, Logging }
 import org.apache.spark.rdd.RDD
 import java.util.logging.Level
+import org.scalatra._
 
 object WebUi extends ADAMCommandCompanion {
   val commandName = "webui"
@@ -36,6 +37,12 @@ object WebUi extends ADAMCommandCompanion {
 }
 
 class WebUiArgs extends Args4jBase with ParquetArgs with SparkArgs {
+}
+
+class WebUiServlet extends ScalatraServlet {
+  get("/meow") {
+    "woof woof! " + Math.random.toString()
+  }
 }
 
 class WebUi(protected val args: WebUiArgs) extends ADAMSparkCommand[WebUiArgs] with Logging {

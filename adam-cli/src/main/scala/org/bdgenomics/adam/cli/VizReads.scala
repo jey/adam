@@ -29,8 +29,8 @@ import org.kohsuke.args4j.{ Argument, Option => Args4jOption }
 
 import scala.math._
 
-import org.scalatra.ScalatraServlet
-import org.scalatra.json.JacksonJsonSupport
+import org.scalatra._
+import org.scalatra.json._
 import org.json4s._
 import org.json4s.JsonDSL._
 import org.json4s.jackson.JsonMethods._
@@ -91,6 +91,8 @@ class VizReadsArgs extends Args4jBase with SparkArgs with ParquetArgs {
 }
 
 class VizServlet extends ScalatraServlet with JacksonJsonSupport {
+  protected implicit val jsonFormats: Formats = DefaultFormats
+
   var regInfo = new ReferenceRegion("Chromosome", 0L, 100L)
 
   get("/reads") {

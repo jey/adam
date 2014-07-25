@@ -30,6 +30,7 @@ import org.kohsuke.args4j.{ Argument, Option => Args4jOption }
 import scala.math._
 
 import org.scalatra.ScalatraServlet
+import org.scalatra.json.JacksonJsonSupport
 import org.json4s._
 import org.json4s.JsonDSL._
 import org.json4s.jackson.JsonMethods._
@@ -89,26 +90,18 @@ class VizReadsArgs extends Args4jBase with SparkArgs with ParquetArgs {
   var refName: String = null
 }
 
-class VizServlet extends ScalatraServlet {
+class VizServlet extends ScalatraServlet with JacksonJsonSupport {
   var regInfo = new ReferenceRegion("Chromosome", 0L, 100L)
 
-  get("/?") {
-    redirect(url("reads"))
-  }
-
-  get("/reads/?") {
-    post(url("/reads/", Iterable("ref" -> regInfo.referenceName, "start" -> regInfo.start, "end" -> regInfo.end)))
-
-    val templateEngine = new TemplateEngine
-    templateEngine.layout("adam-cli/src/main/webapp/WEB-INF/layouts/default.ssp", Map("regInfo" -> regInfo))
-  }
-
-  post("/reads/:ref") {
-    contentType = "text/html"
-
+  get("/reads") {
+    /*
     regInfo = new ReferenceRegion(params("ref"), params("start").toLong, params("end").toLong)
     val region = new ReferenceRegion(regInfo.referenceName, regInfo.start, regInfo.end)
     VizReads.draw(region, new TrackedLayout(VizReads.reads.filterByOverlappingRegion(region).collect()))
+    */
+
+    contentType = formats("json")
+    Array(("hello", params("hello")), ("world", params("world")))
   }
 }
 

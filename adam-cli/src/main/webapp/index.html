@@ -4,6 +4,9 @@
     <title>Genome visualization for ADAM</title>
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8">
     </script>
+    <script>
+      d3.json("/reads?start=0&end=100")
+    </script>
     <style>
         body { font: 12px Arial;}
         .axis path,
@@ -58,6 +61,5 @@
                        onclick="moveRight()"/>
             </span>
     <br>
-    <!--<script src="DataViz.js"></script>-->
 </body>
 </html>
